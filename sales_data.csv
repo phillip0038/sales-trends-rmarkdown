@@ -1,0 +1,11 @@
+Date,Product,Units_Sold,Price,In_Stock
+2023-01-01,iPad,12,34.99,True
+2023-01-02,Pouch,8,14.97,False
+2023-01-03,Mug,5,9.99,True
+2023-01-04,Hoodie,10,39.99,True
+2023-01-05,iPad,15,34.99,True
+2023-01-06,Mug,6,9.99,False
+2023-01-07,Pouch,7,14.97,False
+2023-01-08,Hoodie,9,39.99,True
+2023-01-09,iPad,11,34.99,True
+2023-01-10,Mug,4,9.99,True

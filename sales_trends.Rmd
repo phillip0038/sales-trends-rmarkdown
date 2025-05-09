@@ -1,0 +1,64 @@
+---
+title: "Sales Trends Report"
+author: "Phillip Beagley"
+date: "2025-05-08"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lubridate)
+library(zoo)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r load-data}
+sales_data <- read_csv("sales_data.csv", show_col_types = FALSE)
+
+sales_data <- sales_data %>%
+  mutate(Revenue = Units_Sold * Price)
+```
+
+```{r daily-revenue}
+daily_revenue <- sales_data %>%
+  group_by(Date) %>%
+  summarize(Total_Revenue = sum(Revenue))
+
+daily_revenue
+```
+
+```{r line-chart, fig.width=7, fig.height=5}
+ggplot(daily_revenue, aes(x = Date, y = Total_Revenue)) +
+  geom_line(color = "steelblue", linewidth = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Daily Revenue Over Time",
+    x = "Date",
+    y = "Total Revenue"
+  ) +
+  theme_minimal()
+```
+
+```{r moving-average, fig.width=7, fig.height=5}
+daily_revenue <- daily_revenue %>%
+  arrange(Date) %>%
+  mutate(
+    MA_3 = rollmean(Total_Revenue, k = 3, fill = NA, align = "right")
+  )
+
+ggplot(daily_revenue, aes(x = Date)) +
+  geom_line(aes(y = Total_Revenue), color = "gray70", linewidth = 1) +
+  geom_line(aes(y = MA_3), color = "darkorange", linewidth = 1.2) +
+  labs(
+    title = "Daily Revenue with 3-Day Moving Average",
+    x = "Date",
+    y = "Revenue"
+  ) +
+  theme_minimal()
+```
+
+## Key Insights
+
+- Revenue varies day to day, with noticeable peaks around high-volume sales dates.
+- The 3-day moving average smooths out volatility and reveals longer-term sales trends.
+- This insight can guide decisions about when to run promotions or restock inventory.
